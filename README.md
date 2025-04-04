@@ -1,4 +1,4 @@
-# Spring applicatin with JWT authentication flux
+# Spring application with JWT authentication flux
 
 ## Overview
 This Spring Boot application demonstrates how to implement JWT authentication in a reactive environment using Spring WebFlux. The project is designed to offer secure REST APIs with token-based authentication while leveraging the non-blocking, event-driven architecture provided by WebFlux.
