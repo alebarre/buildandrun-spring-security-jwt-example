@@ -1,0 +1,21 @@
+meta {
+  name: Feed
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:8080/feed
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "content":"Esse é outro tweet criado por um user"
+  }
+}

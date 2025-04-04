@@ -1,0 +1,22 @@
+meta {
+  name: Create user
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "username":"user2",
+    "password":"123"
+  }
+}
