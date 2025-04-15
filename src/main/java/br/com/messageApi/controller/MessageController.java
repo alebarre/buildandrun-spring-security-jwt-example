@@ -30,6 +30,16 @@ public class MessageController {
         this.userRepository = userRepository;
     }
 
+    // O método feed é responsável por retornar as mensagens do feed
+    // Ele recebe os parâmetros de paginação (page e pageSize) e retorna uma lista de mensagens paginada
+    // O método usa o MessageRepository para buscar as mensagens no banco de dados e retorna um FeedDto com as mensagens
+    // O FeedDto contém uma lista de FeedItemDto, que representa cada mensagem do feed
+    // O FeedItemDto contém o ID da mensagem, o conteúdo da mensagem e o nome do usuário que enviou a mensagem
+    // O PageRequest cria uma solicitação de página com os parâmetros de paginação
+    // O Sort ordena as mensagens pela data de criação (creationTimestamp) em ordem decrescente
+    // O método retorna um ResponseEntity com o FeedDto e o status HTTP 200 (OK)
+    // O método também usa o JwtAuthenticationToken para autenticar o usuário que está fazendo a solicitação e se tem a permissão de admin para acessar o feed
+    // Se o usuário não tiver a permissão de admin, o método retorna um ResponseEntity com o status HTTP 403 (Forbidden)
     @GetMapping("/feed")
     public ResponseEntity<FeedDto> feed(@RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
@@ -43,10 +53,15 @@ public class MessageController {
                                 message.getUser().getUsername())
                 );
 
+        // Retorna o FeedDto com as mensagens paginadas, contendo a lista de mensagens, número da página atual, tamanho da página, total de páginas 
+        // e o total de elementos.
         return ResponseEntity.ok(new FeedDto(
-                messages.getContent(), page, pageSize, messages.getTotalPages(), messages.getTotalElements()));
+                messages.getContent(), page, pageSize, messages.getTotalPages(), messages.getTotalElements())); 
+    
     }
 
+    // O método createmessage é responsável por criar uma nova mensagem
+    // Ele recebe um CreateMessagetDto com o conteúdo da mensagem e o token JWT do usuário autenticado
     @PostMapping("/messages")
     public ResponseEntity<Void> createmessage(@RequestBody CreateMessagetDto dto, JwtAuthenticationToken token) {
     	

@@ -28,6 +28,7 @@ public class Role {
         this.name = name;
     }
 
+    //Enum para criação de roles
     public enum Values {
 
         ADMIN(1L),
