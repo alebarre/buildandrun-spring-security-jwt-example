@@ -1,4 +1,4 @@
-package br.com.messageApi.controller.dto;
+package br.com.messageApi.dto;
 
 public record FeedItemDto(long messageId, String content, String username) {
 }

@@ -1,16 +1,14 @@
 package br.com.messageApi.controller;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import br.com.messageApi.service.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.messageApi.controller.dto.CreateMessagetDto;
-import br.com.messageApi.controller.dto.FeedDto;
-import br.com.messageApi.controller.dto.FeedItemDto;
+import br.com.messageApi.dto.CreateMessagetDto;
+import br.com.messageApi.dto.FeedDto;
 import br.com.messageApi.entities.Role;
 import br.com.messageApi.entities.Message;
 import br.com.messageApi.repository.MessageRepository;
@@ -23,11 +21,13 @@ public class MessageController {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final MessageService messageService;
 
     public MessageController(MessageRepository messageRepository,
-                           UserRepository userRepository) {
+                             UserRepository userRepository, MessageService messageService) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.messageService = messageService;
     }
 
     // O método feed é responsável por retornar as mensagens do feed
@@ -41,23 +41,13 @@ public class MessageController {
     // O método também usa o JwtAuthenticationToken para autenticar o usuário que está fazendo a solicitação e se tem a permissão de admin para acessar o feed
     // Se o usuário não tiver a permissão de admin, o método retorna um ResponseEntity com o status HTTP 403 (Forbidden)
     @GetMapping("/feed")
-    public ResponseEntity<FeedDto> feed(@RequestParam(value = "page", defaultValue = "0") int page,
-                                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public FeedDto feed(@RequestParam(value = "page", defaultValue = "0") int page,
+                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
-        var messages = messageRepository.findAll(
-                PageRequest.of(page, pageSize, Sort.Direction.DESC, "creationTimestamp"))
-                .map(message ->
-                        new FeedItemDto(
-                                message.getMessageId(),
-                                message.getContent(),
-                                message.getUser().getUsername())
-                );
+        var retorno = messageService.listarTodasMensagens(page, pageSize);
 
-        // Retorna o FeedDto com as mensagens paginadas, contendo a lista de mensagens, número da página atual, tamanho da página, total de páginas 
-        // e o total de elementos.
-        return ResponseEntity.ok(new FeedDto(
-                messages.getContent(), page, pageSize, messages.getTotalPages(), messages.getTotalElements())); 
-    
+        return retorno;
+
     }
 
     // O método createmessage é responsável por criar uma nova mensagem
@@ -65,13 +55,7 @@ public class MessageController {
     @PostMapping("/messages")
     public ResponseEntity<Void> createmessage(@RequestBody CreateMessagetDto dto, JwtAuthenticationToken token) {
     	
-        var user = userRepository.findById(UUID.fromString(token.getName()));
-
-        var message = new Message();
-        message.setUser(user.get());
-        message.setContent(dto.content());
-
-        messageRepository.save(message);
+        var retorno = messageService.cadastrarMensagem(dto, token);
 
         return ResponseEntity.ok().build();
     }

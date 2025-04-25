@@ -3,7 +3,7 @@ package br.com.messageApi.entities;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.messageApi.controller.dto.LoginRequest;
+import br.com.messageApi.dto.LoginRequest;
 
 import java.util.Set;
 import java.util.UUID;

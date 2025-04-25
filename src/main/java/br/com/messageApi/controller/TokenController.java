@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;	
 
-import br.com.messageApi.controller.dto.LoginRequest;
-import br.com.messageApi.controller.dto.LoginResponse;
+import br.com.messageApi.dto.LoginRequest;
+import br.com.messageApi.dto.LoginResponse;
 import br.com.messageApi.entities.Role;
 import br.com.messageApi.repository.UserRepository;
 

@@ -6,16 +6,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.messageApi.controller.dto.CreateUserDto;
+import br.com.messageApi.config.SendEmail;
+import br.com.messageApi.dto.CreateUserDto;
 import br.com.messageApi.entities.Role;
 import br.com.messageApi.entities.User;
 import br.com.messageApi.repository.RoleRepository;
 import br.com.messageApi.repository.UserRepository;
+import io.micrometer.common.util.StringUtils;
+import jakarta.mail.MessagingException;
+import jakarta.persistence.NoResultException;
 
 import java.util.List;
 import java.util.Set;
@@ -62,4 +67,8 @@ public class UserController {
         var users = userRepository.findAll();
         return ResponseEntity.ok(users);
     }
+    
+    
+
+    
 }
